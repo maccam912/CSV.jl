@@ -88,7 +88,7 @@ f = CSV.Source(joinpath(dir, "test_quoted_numbers.csv"); categorical=false)
 @test size(Data.schema(f), 2) == 3
 @test size(Data.schema(f), 1) == 3
 ds = CSV.read(f)
-@test Data.types(Data.schema(f)) == (WeakRefString{UInt8}, Int, Int)
+@test Data.types(Data.schema(f)) == (String, Int, Int)
 
 #test various newlines
 f = CSV.Source(joinpath(dir, "test_crlf_line_endings.csv"))
@@ -206,7 +206,7 @@ f = CSV.Source(joinpath(dir, "Sacramentorealestatetransactions.csv"))
 @test size(Data.schema(f), 2) == 12
 @test size(Data.schema(f), 1) == 985
 @test Data.header(Data.schema(f)) == ["street","city","zip","state","beds","baths","sq__ft","type","sale_date","price","latitude","longitude"]
-@test Data.types(Data.schema(f)) == (WeakRefString{UInt8},CategoricalString{UInt32},Int,CategoricalString{UInt32},Int,Int,Int,CategoricalString{UInt32},CategoricalString{UInt32},Int,Float64,Float64)
+@test Data.types(Data.schema(f)) == (String,CategoricalString{UInt32},Int,CategoricalString{UInt32},Int,Int,Int,CategoricalString{UInt32},CategoricalString{UInt32},Int,Float64,Float64)
 ds = CSV.read(f)
 
 f = CSV.Source(joinpath(dir, "SalesJan2009.csv"); types=Dict(3=>WeakRefString{UInt8},7=>Union{WeakRefString{UInt8}, Missing}))
@@ -220,7 +220,7 @@ f = CSV.Source(joinpath(dir, "stocks.csv"))
 @test size(Data.schema(f), 2) == 2
 @test size(Data.schema(f), 1) == 30
 @test Data.header(Data.schema(f)) == ["Stock Name","Company Name"]
-@test Data.types(Data.schema(f)) == (WeakRefString{UInt8},WeakRefString{UInt8})
+@test Data.types(Data.schema(f)) == (String,WeakRefString{UInt8})
 ds = CSV.read(f)
 
 f = CSV.Source(joinpath(dir, "TechCrunchcontinentalUSA.csv"); types=Dict(4=>Union{WeakRefString{UInt8}, Missing},5=>Union{WeakRefString{UInt8}, Missing}))
@@ -433,7 +433,7 @@ df = CSV.read(joinpath(dir, "attenu.csv"), null="NA", types=Dict(3=>Union{Missin
 f = CSV.Source(joinpath(dir, "test_null_only_column.csv"), categorical=false, null="NA")
 @test size(Data.schema(f)) == (3, 2)
 ds = CSV.read(f)
-@test Data.types(Data.schema(f)) == (WeakRefString{UInt8}, Missing)
+@test Data.types(Data.schema(f)) == (String, Missing)
 @test all(ismissing, ds[2])
 
 # #107
@@ -443,4 +443,4 @@ df = CSV.read(IOBuffer("1,a,i\n2,b,ii\n3,c,iii"); datarow=1)
 # #115 (Int -> Union{Int, Missing} -> Union{WeakRefString, Missing} promotion)
 df = CSV.read(joinpath(dir, "attenu.csv"), null="NA", rows_for_type_detect=200)
 @test size(df) == (182, 5)
-@test Data.types(Data.schema(df)) == (Int, Float64, Union{Missings.Missing, WeakRefString{UInt8}}, Float64, Float64)
+@test Data.types(Data.schema(df)) == (Int, Float64, Union{Missings.Missing, String}, Float64, Float64)
