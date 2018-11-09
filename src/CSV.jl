@@ -112,7 +112,7 @@ function File(source::Union{String, IO};
     # parsing options
     missingstrings=String[],
     missingstring="",
-    delim::Union{Char, String}=",",
+    delim::Char=',',
     ignorerepeated::Bool=false,
     quotechar::Union{UInt8, Char}='"',
     openquotechar::Union{UInt8, Char, Nothing}=nothing,
